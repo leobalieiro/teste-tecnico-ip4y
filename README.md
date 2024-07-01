@@ -4,6 +4,7 @@ No terminal:
 
 * cd web
 * php composer install
+* cd ..
 * docker-compose up -d
 * docker-compose exec app bash
 
