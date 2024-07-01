@@ -38,7 +38,7 @@
         </div>
         <button type="submit" class="btn btn-success">Enviar</button>
         <button type="reset" class="btn btn-danger">Recomeçar</button>
-        <a href="{{ route('clients.index') }}" class="btn btn-secondary">Voltar</a>
+        <a href="{{ route('clients.index') }}" class="btn btn-secondary" onclick="loader('show');">Voltar</a>
     </form>
 @endsection
 
@@ -58,7 +58,10 @@
                     title: 'CPF Inválido',
                     text: 'Por favor digite um CPF válido.',
                 });
+                return;
             }
+
+            loader('show');
         });
     </script>
 @endsection

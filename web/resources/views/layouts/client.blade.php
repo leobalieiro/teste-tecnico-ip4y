@@ -5,10 +5,56 @@
     <title>@yield('title', 'My Application')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --primary-light: #121212;
+            --secondary: #0ee951;
+            --tertiary: #00dabf;
+            --gradient: linear-gradient(129deg, rgba(0, 198, 63, 1) -72%, #00FFF5 97%);
+        }
+
+
+        #loader {
+            margin: 0px;
+            padding: 0px;
+            position: fixed;
+            inset: 0px;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary-light);
+            z-index: 10000000;
+            display: none;
+        }
+
+        .loader {
+            width: 50px;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background:
+                radial-gradient(farthest-side, #00FFF5 94%, rgba(0, 198, 63, .7)) top/8px 8px no-repeat,
+                conic-gradient(rgba(0, 198, 63, .7) 30%, #00FFF5);
+            -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+            animation: loader_spinner 1s infinite linear;
+        }
+
+        @keyframes loader_spinner {
+            100% {
+                transform: rotate(1turn)
+            }
+        }
+    </style>
     @yield('style')
 </head>
 
 <body>
+    <div id="loader">
+        <div class="loader"></div>
+    </div>
+
     <div class="container mt-5">
         @yield('content')
     </div>
@@ -40,6 +86,16 @@
                 });
             @endif
         });
+
+        function loader(type = 'show', timeOut = 0) {
+            setTimeout(() => {
+                if (type == 'show') {
+                    $('#loader').css('display', 'flex');
+                } else if (type == 'hide') {
+                    $('#loader').css('display', 'none');
+                }
+            }, timeOut);
+        }
 
         function validCpf(cpf) {
             cpf = cpf.replace(/[^\d]+/g, '');
