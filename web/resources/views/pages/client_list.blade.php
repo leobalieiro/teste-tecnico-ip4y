@@ -33,8 +33,7 @@
                         <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm"
-                                onclick="if(!confirm('Realmente deseja deletar esse cliente?')) return false;">Deletar</button>
+                            <button type="submit" class="btn-submit-delete btn btn-danger btn-sm ">Deletar</button>
                         </form>
                     </td>
                 </tr>
@@ -49,4 +48,27 @@
         @csrf
         <button type="submit" class="btn btn-success">Enviar dados para API</button>
     </form>
+@endsection
+
+@section('script')
+    <script>
+        $('.btn-submit-delete').on('click', function(e) {
+            e.preventDefault(); // Prevê a ação padrão do formulário
+            const form = $(this).closest('form'); // Seleciona o formulário mais próximo
+            Swal.fire({
+                title: 'Você tem certeza?',
+                text: "Você não poderá reverter esta ação!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, deletar cliente!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // Submete o formulário
+                }
+            })
+        });
+    </script>
 @endsection
