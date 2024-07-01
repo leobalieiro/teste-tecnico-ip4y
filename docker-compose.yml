@@ -1,0 +1,66 @@
+services:
+    # Serviço do PHP/Laravel
+    app:
+        build: ./web
+        container_name: laravel_app
+        restart: unless-stopped
+        working_dir: /var/www
+        volumes:
+            - ./web:/var/www
+            - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        depends_on:
+            - db
+        networks:
+            - laravel
+
+    # Serviço do Nginx
+    webserver:
+        image: nginx:alpine
+        container_name: laravel_webserver
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ./web:/var/www
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+        networks:
+            - laravel
+
+    # Serviço do MySQL
+    db:
+        image: mysql:5.7
+        container_name: laravel_database
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: laravel
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+        ports:
+            - "3307:3306"
+        volumes:
+            - dbdata:/var/lib/mysql
+        networks:
+            - laravel
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: laravel_phpmyadmin
+        restart: unless-stopped
+        environment:
+            PMA_HOST: db
+            PMA_USER: laravel
+            PMA_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+        ports:
+            - "8080:80"
+        networks:
+            - laravel
+
+volumes:
+    dbdata:
+
+
+networks:
+    laravel:
+        driver: bridge
